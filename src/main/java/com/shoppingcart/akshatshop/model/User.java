@@ -8,11 +8,10 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Entity
 @RequiredArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@Entity
 public class User {
 
     @Id
@@ -24,7 +23,6 @@ public class User {
 
     private String password;
 
-    private String role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;

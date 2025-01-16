@@ -40,11 +40,6 @@ public class PublicController {
         userService.saveNewUser(user);
     }
 
-    @PostMapping("/create-admin")
-    public void adminsignup(@RequestBody User user){
-        userService.saveAdmin(user);
-    }
-
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody User user){
         try {

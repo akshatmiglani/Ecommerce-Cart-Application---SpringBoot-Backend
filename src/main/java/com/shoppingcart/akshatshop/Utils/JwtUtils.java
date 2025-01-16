@@ -17,8 +17,8 @@ import java.util.Map;
 @Component
 public class JwtUtils {
 
-    @Value("env.JWT_KEY")
-    private final String SECRET_KEY = "";
+    @Value("${env.JWT_KEY}")
+    private String SECRET_KEY;
 
     public String extractUsername(String token) {
         Claims claims = extractAllClaims(token);
@@ -59,7 +59,7 @@ public class JwtUtils {
                 .header().empty().add("typ","JWT")
                 .and()
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis()+1000*60*5))
+                .expiration(new Date(System.currentTimeMillis()+1000*60*60))
                 .signWith(getSigningKey())
                 .compact();
 
