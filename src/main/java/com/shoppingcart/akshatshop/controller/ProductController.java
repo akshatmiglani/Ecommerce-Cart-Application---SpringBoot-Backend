@@ -93,8 +93,8 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/products/by/category-and-brand")
-    public ResponseEntity<ApiResponse> getProductByCategoryAndName(@RequestParam String brandName,@RequestParam String categoryName){
+    @GetMapping("/products/by/category-and-name")
+    public ResponseEntity<ApiResponse> getProductByCategoryAndName(@RequestParam String categoryName,@RequestParam String brandName){
         try {
             List<Product> products = productService.getProductsByCategoryAndBrand(categoryName,brandName);
             if(products.isEmpty()){
@@ -107,7 +107,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/products/{name}/products")
+    @GetMapping("/products/{productName}/products")
     public ResponseEntity<ApiResponse> getProductByName(@PathVariable String productName){
         try {
             List<Product> products = productService.getProductByName(productName);
@@ -136,7 +136,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/{category}/all/products")
-    public ResponseEntity<ApiResponse> findProductsByBrand(@PathVariable String category){
+    public ResponseEntity<ApiResponse> findProductsByCategory(@PathVariable String category){
         try {
             List<Product> products = productService.getProductsByCategory(category);
             if(products.isEmpty()){

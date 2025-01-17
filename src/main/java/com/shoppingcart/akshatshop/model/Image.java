@@ -1,6 +1,7 @@
 package com.shoppingcart.akshatshop.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,5 +29,6 @@ public class Image {
 
     @ManyToOne
     @JoinColumn(name="product_id")
+    @JsonIgnore
     private Product product;
 }
