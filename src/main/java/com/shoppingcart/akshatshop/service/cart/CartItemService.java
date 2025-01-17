@@ -40,7 +40,11 @@ public class CartItemService implements ICartItemService{
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
         }
         cartItem.setTotalPrice();
-        cart.addItem(cartItem);
+
+        if (!cart.getItems().contains(cartItem)) {
+            cart.addItem(cartItem);
+        }
+
         cartItemRepository.save(cartItem);
         cartRepository.save(cart);
 
@@ -55,6 +59,7 @@ public class CartItemService implements ICartItemService{
                 .stream().filter(item -> item.getProduct().getId().equals(productId)).findFirst().orElseThrow(()-> new ResourceNotFoundException("Product Not Found"));
 
         cart.removeItem(cartItem);
+        cartItemRepository.delete(cartItem);
         cartRepository.save(cart);
 
     }

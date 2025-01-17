@@ -3,9 +3,13 @@ package com.shoppingcart.akshatshop.controller;
 import com.shoppingcart.akshatshop.exceptions.ResourceNotFoundException;
 import com.shoppingcart.akshatshop.model.Cart;
 import com.shoppingcart.akshatshop.response.ApiResponse;
+import com.shoppingcart.akshatshop.service.cart.CartItemService;
+import com.shoppingcart.akshatshop.service.cart.ICartItemService;
 import com.shoppingcart.akshatshop.service.cart.ICartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -18,32 +22,88 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class CartController {
 
     private final ICartService cartService;
+    private final ICartItemService cartItemService;
 
-    @GetMapping("/{cartId}/my-cart")
-    public ResponseEntity<ApiResponse> getCart(@PathVariable Long cartId) {
+    @GetMapping("/my-cart")
+    public ResponseEntity<ApiResponse> getCart(Authentication authentication) {
         try {
-            Cart cart = cartService.getCart(cartId);
-            return ResponseEntity.ok(new ApiResponse("Success", cart));
+            String username = authentication.getName();
+            Cart cart = cartService.getCartForUser(username);
+            return ResponseEntity.ok(new ApiResponse("User Cart", cart));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
-    @DeleteMapping("/{cartId}/clear")
-    public ResponseEntity<ApiResponse> clearCart( @PathVariable Long cartId) {
+    @PostMapping("/my-cart/item")
+    public ResponseEntity<ApiResponse> addItemToMyCart(
+            Authentication authentication,
+            @RequestParam Long productId,
+            @RequestParam Integer quantity)
+    {
         try {
-            cartService.clearCart(cartId);
-            return ResponseEntity.ok(new ApiResponse("Clear Cart Success!", null));
+            String username = authentication.getName();
+            Cart cart = cartService.getCartForUser(username);
+            cartItemService.addItemToCart(cart.getId(), productId, quantity);
+            return ResponseEntity.ok(new ApiResponse("Item added to cart", null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @DeleteMapping("/my-cart/item")
+    public ResponseEntity<ApiResponse> removeItemFromMyCart(
+            Authentication authentication,
+            @RequestParam Long productId)
+    {
+        try {
+            String username = authentication.getName();
+            Cart cart = cartService.getCartForUser(username);
+            cartItemService.removeItemFromCart(cart.getId(), productId);
+            return ResponseEntity.ok(new ApiResponse("Item removed from cart", null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @PutMapping("/my-cart/item")
+    public ResponseEntity<ApiResponse> updateItemQuantityInMyCart(
+            Authentication authentication,
+            @RequestParam Long productId,
+            @RequestParam int quantity)
+    {
+        try {
+            String username = authentication.getName();
+            Cart cart = cartService.getCartForUser(username);
+            cartItemService.updateItemQuantity(cart.getId(), productId, quantity);
+            return ResponseEntity.ok(new ApiResponse("Item quantity updated", null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @DeleteMapping("/my-cart/clear")
+    public ResponseEntity<ApiResponse> clearCart(Authentication authentication) {
+        try {
+            String username = authentication.getName();
+            Cart cart = cartService.getCartForUser(username);
+            cartService.clearCart(cart.getId());
+            return ResponseEntity.ok(new ApiResponse("Clear Cart Success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
-    @GetMapping("/{cartId}/cart/total-price")
-    public ResponseEntity<ApiResponse> getTotalAmount( @PathVariable Long cartId) {
+    @GetMapping("/my-cart/total-price")
+    public ResponseEntity<ApiResponse> getTotalAmount(Authentication authentication) {
         try {
-            BigDecimal totalPrice = cartService.getTotalPrice(cartId);
-            return ResponseEntity.ok(new ApiResponse("Total Price", totalPrice));
+            String username = authentication.getName();
+            Cart cart = cartService.getCartForUser(username);
+            BigDecimal total = cartService.getTotalPrice(cart.getId());
+            return ResponseEntity.ok(new ApiResponse("Total Price", total));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
