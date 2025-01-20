@@ -6,6 +6,7 @@ import com.shoppingcart.akshatshop.model.Image;
 import com.shoppingcart.akshatshop.model.Product;
 import com.shoppingcart.akshatshop.response.ApiResponse;
 import com.shoppingcart.akshatshop.service.image.ImageService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -25,6 +26,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("${api.prefix}/images")
+@Tag(name = "Image APIs")
 public class ImageController {
 
     private final ImageService imageService;

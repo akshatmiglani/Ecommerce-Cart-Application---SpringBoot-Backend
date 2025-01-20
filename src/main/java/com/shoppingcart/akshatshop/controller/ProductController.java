@@ -9,6 +9,7 @@ import com.shoppingcart.akshatshop.request.AddProductRequest;
 import com.shoppingcart.akshatshop.request.ProductUpdateRequest;
 import com.shoppingcart.akshatshop.response.ApiResponse;
 import com.shoppingcart.akshatshop.service.product.IProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("${api.prefix}/products")
+@Tag(name = "Products API")
 public class ProductController {
     private final IProductService productService;
 

@@ -6,6 +6,7 @@ import com.shoppingcart.akshatshop.exceptions.ResourceNotFoundException;
 import com.shoppingcart.akshatshop.model.Category;
 import com.shoppingcart.akshatshop.response.ApiResponse;
 import com.shoppingcart.akshatshop.service.category.CategoryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("${api.prefix}/categories")
+@Tag(name = "Category APIs")
 public class CategoryController {
     private final CategoryService categoryService;
 

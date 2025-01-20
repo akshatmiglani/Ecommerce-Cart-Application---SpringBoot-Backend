@@ -7,6 +7,7 @@ import com.shoppingcart.akshatshop.model.User;
 import com.shoppingcart.akshatshop.response.ApiResponse;
 import com.shoppingcart.akshatshop.service.cart.ICartService;
 import com.shoppingcart.akshatshop.service.user.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("${api.prefix}/admin")
 @Slf4j
+@Tag(name = "Admin APIs")
 public class AdminController {
 
     @Autowired

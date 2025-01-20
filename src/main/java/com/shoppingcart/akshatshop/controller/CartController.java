@@ -6,6 +6,7 @@ import com.shoppingcart.akshatshop.response.ApiResponse;
 import com.shoppingcart.akshatshop.service.cart.CartItemService;
 import com.shoppingcart.akshatshop.service.cart.ICartItemService;
 import com.shoppingcart.akshatshop.service.cart.ICartService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/carts")
+@Tag(name = "Cart APIs")
 public class CartController {
 
     private final ICartService cartService;
